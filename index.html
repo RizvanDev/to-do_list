@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=402 user-scable=no">
+   <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
+   <link rel="stylesheet" href="css/style.min.css" type="text/css">
+   <title>My to-do list</title>
+</head>
+
+<body>
+
+   <main class="main" id="wrapper">
+      <div class="title__wrapper">
+         <h1 class="page__title">My to do list</h1>
+         <button type="button" class="title__btn"><img src="./images/icon.png" alt=""></button>
+      </div>
+      <div class="write">
+         <input type="text" class="input" placeholder="add cases">
+         <label for="details" class="label">DETAILED INFORMATION:</label>
+         <textarea id="details" class="text"></textarea>
+         <button type="reset" class="clearText">clear</button>
+         <button type="reset" class="reset">x</button>
+      </div>
+      <div class="buttons">
+         <button type="button" class="save btn">SAVE</button>
+         <button class="showReference btn">REFERENCE</button>
+      </div>
+      <ul class="todo"></ul>
+      <div class="overlay">
+         <button type="button" class="closeReference">close</button>
+         <ul class="reference">
+            <li>To hide or show the input field, click on the pencil</li>
+            <li>To add a to-do list, write the text in the input field and press SAVE</li>
+            <li>To delete one item, hover over it and click on the trash icon</li>
+            <li>To show the details of the action plan, click on details</li>
+            <div class="reference__note">Note:</div>
+            <p class="note__text" id="getReference">
+               If you have a long text, it is better to write it in the detailed information field, and write the name
+               in the main field.
+            </p>
+         </ul>
+      </div>
+   </main>
+
+   <script src="js/script.js"></script>
+</body>
+
+</html>
