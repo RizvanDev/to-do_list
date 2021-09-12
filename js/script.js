@@ -113,7 +113,7 @@ function deleteToDo() {
    for (let i = 0; i < deleteBtn.length; i++) {
       deleteBtn[i].addEventListener('click', () => {
          deleteBtn[i].parentElement.remove();
-         cases.splice(cases[i], 1);
+         cases.splice(i, 1);
          localStorage.setItem('userData', JSON.stringify(cases));
       })
    }
