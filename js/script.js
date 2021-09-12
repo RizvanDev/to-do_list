@@ -21,7 +21,7 @@ const reference = document.querySelector('.overlay');
 const referenceClose = document.querySelector('.closeReference');
 
 
-
+// date/time
 setInterval(function () {
    timeNow.innerHTML = dateTime()
 }, 100);
@@ -29,21 +29,27 @@ setInterval(function () {
 function dateTime() {
 
    let currentTime = new Date();
-   let day = currentTime.getDate();
-   let month = currentTime.getMonth();
+   let year = currentTime.getFullYear();
 
+   let month = currentTime.getMonth();
    if (month <= 9) month = '0' + month;
 
-   let year = currentTime.getFullYear();
-   let hours = currentTime.getHours();
-   let minute = currentTime.getMinutes();
-   let seconds = currentTime.getSeconds();
+   let day = currentTime.getDate();
+   if (day <= 9) day = '0' + day;
 
+   let hours = currentTime.getHours();
+   if (hours <= 9) hours = '0' + hours;
+
+   let minute = currentTime.getMinutes();
+   if (minute <= 9) minute = '0' + minute;
+
+   let seconds = currentTime.getSeconds();
    if (seconds <= 9) seconds = '0' + seconds;
 
    return year + '.' + month + '.' + day + '  ' + hours + '.' + minute + '.' + seconds;
 }
 
+// image in localstorage
 addImg.addEventListener('change', () => {
    uploadFile(addImg.files[0]);
 });
@@ -78,27 +84,26 @@ document.addEventListener('DOMContentLoaded', () => {
    }
 });
 
+// add new list button
+addNewList.addEventListener('click', () => {
 
-addNewList.addEventListener('click', openToDo);
-
-function openToDo() {
    write.classList.toggle('open');
    creatList.classList.toggle('active');
    addNewList.classList.toggle('rotate');
    input.value = '';
    text.value = '';
-};
 
-reset.addEventListener('click', clearInput);
-clearText.addEventListener('click', clearTxt);
+});
 
-function clearInput() {
+// clear fields value
+reset.addEventListener('click', () => {
    input.value = '';
-};
-function clearTxt() {
+});
+clearText.addEventListener('click', () => {
    text.value = '';
-};
+});
 
+// creat new task and save in localstorage
 function Task(title, text) {
    this.title = title;
    this.text = text;
@@ -115,8 +120,9 @@ if (localStorage.userData === undefined) {
 function creatTemplate(cases) {
    return `
       <div class="list">
-         <span class="list__title">${cases.title}</span>
-         <p class="list__text">${cases.text}</p>
+         <input type="checkbox"  id="default-checkbox" class="default-check"> 
+         <label for="default-checkbox" class="my-check list__title">${cases.title}</label>
+         <textarea class="list__text">${cases.text}</textarea>
          <button type="button" class="view__details">details</button>
          <span class="clear"></span>
        </div>
@@ -137,41 +143,33 @@ creatList.addEventListener('click', () => {
    if (input.value == "") return false;
 
    cases.push(new Task(input.value, text.value));
-
    localStorage.setItem('userData', JSON.stringify(cases));
 
-   toDoList.innerHTML = `
-     <div class="list">
-        <span class="list__title"></span>
-        <p class="list__text"></p>
-        <button type="button" class="view__details">details</button>
-        <span class="clear"></span>
-     </div>
-   `
-
    searchToDo();
-   dinamic();
+   followText();
    deleteToDo();
+   dinamic();
 
    input.value = '';
    text.value = '';
 });
 
+// if there is no text in the details field, the details button is hidden
+function followText() {
+   const list = document.querySelectorAll('.list');
+   const viewDetails = document.querySelectorAll('.view__details');
+   const txt = document.querySelectorAll('.list__text');
 
-function dinamic() {
-   const detailView = document.querySelectorAll('.view__details');
-   const listText = document.querySelectorAll('.list__text');
-
-
-   for (let i = 0; i < detailView.length; i++) {
-      detailView[i].addEventListener('click', () => {
-         detailView[i].classList.toggle('view');
-         listText[i].classList.toggle('view');
-      });
+   for (let i = 0; i < list.length; i++) {
+      if (txt[i].value == '') {
+         viewDetails[i].style.display = 'none';
+      }
    }
 }
-dinamic();
+followText();
 
+
+// delete task and save in local storage
 function deleteToDo() {
    const deleteBtn = document.querySelectorAll('.clear');
 
@@ -185,11 +183,24 @@ function deleteToDo() {
 }
 deleteToDo();
 
-showTips.addEventListener('click', openTips);
-referenceClose.addEventListener('click', closeTips);
+// add classes for tasks buttons
+function dinamic() {
 
-function openTips() {
+   const detailView = document.querySelectorAll('.view__details');
+   const listText = document.querySelectorAll('.list__text');
 
+   for (let i = 0; i < detailView.length; i++) {
+      detailView[i].addEventListener('click', () => {
+         detailView[i].classList.toggle('view');
+         listText[i].classList.toggle('view');
+      });
+   }
+}
+dinamic();
+
+
+// open and close help desk
+showTips.addEventListener('click', () => {
    reference.style.visibility = 'visible';
    reference.style.opacity = '1';
    reference.style.transition = 'all 0.8s ease 0s';
@@ -199,12 +210,9 @@ function openTips() {
       behavior: "smooth",
    });
 
-};
-
-function closeTips() {
-
+});
+referenceClose.addEventListener('click', () => {
    reference.style.visibility = 'hidden';
    reference.style.opacity = '0';
    reference.style.transition = 'all  0s ease 0s';
-
-};
+});
