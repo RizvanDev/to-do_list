@@ -1,6 +1,9 @@
 "use strict"
 
-const addNewList = document.querySelector('.title__btn');
+const timeNow = document.getElementById('time');
+const addImg = document.getElementById('add-img');
+const img = document.getElementById('avatar-out');
+const addImgBtn = document.querySelector('.avatar__item');
 
 const write = document.querySelector('.write');
 const input = document.querySelector('.input');
@@ -12,17 +15,76 @@ const toDoList = document.querySelector('.todo');
 
 const creatList = document.querySelector('.save');
 const showTips = document.querySelector('.showReference');
+const addNewList = document.querySelector('.plus__btn');
 
 const reference = document.querySelector('.overlay');
 const referenceClose = document.querySelector('.closeReference');
+
+
+
+setInterval(function () {
+   timeNow.innerHTML = dateTime()
+}, 100);
+
+function dateTime() {
+
+   let currentTime = new Date();
+   let day = currentTime.getDate();
+   let month = currentTime.getMonth();
+
+   if (month <= 9) month = '0' + month;
+
+   let year = currentTime.getFullYear();
+   let hours = currentTime.getHours();
+   let minute = currentTime.getMinutes();
+   let seconds = currentTime.getSeconds();
+
+   if (seconds <= 9) seconds = '0' + seconds;
+
+   return year + '.' + month + '.' + day + '  ' + hours + '.' + minute + '.' + seconds;
+}
+
+addImg.addEventListener('change', () => {
+   uploadFile(addImg.files[0]);
+});
+
+function uploadFile(file) {
+
+   if (!['image/jpeg', 'image/png'].includes(file.type)) {
+      alert('select only the following formats:.jpg, .png');
+      addImg.value = '';
+      return;
+   }
+
+
+   let reader = new FileReader();
+   reader.onload = function (e) {
+      img.innerHTML = `<img src="${e.target.result}" alt="avatar">`;
+   }
+   reader.addEventListener('load', () => {
+      localStorage.setItem('userImgData', reader.result);
+   })
+
+   addImgBtn.style.opacity = '0.4';
+
+   reader.readAsDataURL(file);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+   let resentUserImg = localStorage.getItem('userImgData');
+   if (resentUserImg) {
+      img.innerHTML = `<img src="${resentUserImg}" alt="avatar">`;
+      addImgBtn.style.opacity = '0.4';
+   }
+});
 
 
 addNewList.addEventListener('click', openToDo);
 
 function openToDo() {
    write.classList.toggle('open');
+   creatList.classList.toggle('active');
    addNewList.classList.toggle('rotate');
-   creatList.classList.toggle('opacity');
    input.value = '';
    text.value = '';
 };
@@ -72,9 +134,10 @@ searchToDo();
 
 creatList.addEventListener('click', () => {
 
-   if (input.value === "") return false;
+   if (input.value == "") return false;
 
    cases.push(new Task(input.value, text.value));
+
    localStorage.setItem('userData', JSON.stringify(cases));
 
    toDoList.innerHTML = `
@@ -94,9 +157,11 @@ creatList.addEventListener('click', () => {
    text.value = '';
 });
 
+
 function dinamic() {
    const detailView = document.querySelectorAll('.view__details');
    const listText = document.querySelectorAll('.list__text');
+
 
    for (let i = 0; i < detailView.length; i++) {
       detailView[i].addEventListener('click', () => {
@@ -128,7 +193,6 @@ function openTips() {
    reference.style.visibility = 'visible';
    reference.style.opacity = '1';
    reference.style.transition = 'all 0.8s ease 0s';
-   showTips.style.opacity = '1';
 
    window.scrollTo({
       top: 10000,
@@ -142,8 +206,5 @@ function closeTips() {
    reference.style.visibility = 'hidden';
    reference.style.opacity = '0';
    reference.style.transition = 'all  0s ease 0s';
-   showTips.style.opacity = '0.7';
 
 };
-
-

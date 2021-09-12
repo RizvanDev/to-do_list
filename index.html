@@ -14,7 +14,14 @@
    <main class="main" id="wrapper">
       <div class="title__wrapper">
          <h1 class="page__title">My to do list</h1>
-         <button type="button" class="title__btn"><img src="./images/icon.png" alt=""></button>
+         <time id="time" class="title__time"></time>
+         <div class="avatar">
+            <div class="avatar__item">
+               <input type="file" id="add-img" accept=".jpg,.png" class="avatar__add">
+            </div>
+            <div id="avatar-out" class="myAvatar"></div>
+         </div>
+
       </div>
       <div class="write">
          <input type="text" class="input" placeholder="add cases">
@@ -26,15 +33,17 @@
       <div class="buttons">
          <button type="button" class="save btn">SAVE</button>
          <button class="showReference btn">REFERENCE</button>
+         <button type="button" class="plus__btn">+</button>
       </div>
       <div class="todo"></div>
       <div class="overlay">
          <button type="button" class="closeReference">close</button>
          <ul class="reference">
-            <li>To hide or show the input field, click on the pencil</li>
+            <li>To hide or display the input field, click on the plus sign</li>
             <li>To add a to-do list, write the text in the input field and press SAVE</li>
             <li>To delete one item, hover over it and click on the trash icon</li>
             <li>To show the details of the action plan, click on details</li>
+            <li>to upload an avatar, click on the plus sign in the upper-right corner</li>
             <div class="reference__note">Note:</div>
             <p class="note__text" id="getReference">
                If you have a long text, it is better to write it in the detailed information field, and write the name
