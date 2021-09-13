@@ -122,7 +122,7 @@ function creatTemplate(cases) {
       <div class="list">
          <input type="checkbox"  id="default-checkbox" class="default-check"> 
          <label for="default-checkbox" class="my-check list__title">${cases.title}</label>
-         <textarea class="list__text">${cases.text}</textarea>
+         <textarea class="list__text" readonly>${cases.text}</textarea>
          <button type="button" class="view__details">details</button>
          <span class="clear"></span>
        </div>
