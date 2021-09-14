@@ -104,9 +104,10 @@ clearText.addEventListener('click', () => {
 });
 
 // creat new task and save in localstorage
-function Task(title, text) {
+function Task(title, text, complete) {
    this.title = title;
    this.text = text;
+   this.complete = false;
 }
 
 let cases;
@@ -117,26 +118,28 @@ if (localStorage.userData === undefined) {
    cases = JSON.parse(localStorage.getItem('userData'));
 }
 
-function creatTemplate(cases) {
-   return `
-      <div class="list">
-         <input type="checkbox"  id="default-checkbox" class="default-check"> 
-         <label for="default-checkbox" class="my-check list__title">${cases.title}</label>
-         <textarea class="list__text" readonly>${cases.text}</textarea>
-         <button type="button" class="view__details">details</button>
-         <span class="clear"></span>
-       </div>
-   `
-}
 function searchToDo() {
    toDoList.innerHTML = '';
    if (0 < cases.length) {
+      sortedTasks();
       cases.forEach((item) => {
          toDoList.innerHTML += creatTemplate(item);
       })
    }
 }
 searchToDo();
+
+function creatTemplate(cases) {
+   return `
+      <div class="list ${cases.complete == true ? 'checked' : ''} ">
+         <span class="default-check" ></span > 
+         <label class="my-check list__title">${cases.title}</label>
+         <textarea class="list__text" readonly>${cases.text}</textarea>
+         <button type="button" class="view__details">details</button>
+         <span class="clear"></span>
+       </div >
+      `
+}
 
 creatList.addEventListener('click', () => {
 
@@ -147,6 +150,7 @@ creatList.addEventListener('click', () => {
 
    searchToDo();
    followText();
+   completeTask();
    deleteToDo();
    dinamic();
 
@@ -171,17 +175,51 @@ followText();
 
 // delete task and save in local storage
 function deleteToDo() {
+
    const deleteBtn = document.querySelectorAll('.clear');
 
-   for (let i = 0; i < deleteBtn.length; i++) {
+   for (let i = 0; i < cases.length; i++) {
       deleteBtn[i].addEventListener('click', () => {
+
          deleteBtn[i].parentElement.remove();
-         cases.splice(i, 1);
+         console.log(cases[i].title);
+         cases.splice([i], 1);
          localStorage.setItem('userData', JSON.stringify(cases));
       })
    }
 }
 deleteToDo();
+
+// complete task
+function completeTask() {
+
+   const checkbox = document.querySelectorAll('.default-check');
+   const checkboxLabel = document.querySelectorAll('.list__title');
+   const task = document.querySelectorAll('.list');
+
+   for (let i = 0; i < checkboxLabel.length; i++) {
+
+      checkboxLabel[i].addEventListener('click', () => {
+         task[i].classList.toggle('checked');
+         cases[i].complete = !cases[i].complete;
+         localStorage.setItem('userData', JSON.stringify(cases));
+      })
+      checkbox[i].addEventListener('click', () => {
+         task[i].classList.toggle('checked');
+         cases[i].complete = !cases[i].complete;
+         localStorage.setItem('userData', JSON.stringify(cases));
+      })
+   }
+}
+completeTask();
+
+// filtered tasks
+function sortedTasks() {
+
+   const active = cases.filter(item => item.complete == false);
+   const closed = cases.filter(item => item.complete == true);
+   cases = [...active, ...closed];
+}
 
 // add classes for tasks buttons
 function dinamic() {
@@ -197,7 +235,6 @@ function dinamic() {
    }
 }
 dinamic();
-
 
 // open and close help desk
 showTips.addEventListener('click', () => {
