@@ -118,28 +118,27 @@ if (localStorage.userData === undefined) {
    cases = JSON.parse(localStorage.getItem('userData'));
 }
 
+function creatTemplate(cases, index) {
+   return `
+      <div class="list ${cases.complete == true ? 'checked' : ''} ">
+         <span class="default-check"></span > 
+         <label class="my-check list__title">${cases.title}</label>
+         <textarea class="list__text" readonly>${cases.text}</textarea>
+         <button  type="button" class="view__details">details</button>
+         <span onclick="deleteTask(${index})" class="clear"></span>
+       </div >
+      `
+}
 function searchToDo() {
    toDoList.innerHTML = '';
    if (0 < cases.length) {
       sortedTasks();
-      cases.forEach((item) => {
-         toDoList.innerHTML += creatTemplate(item);
+      cases.forEach((item, index) => {
+         toDoList.innerHTML += creatTemplate(item, index);
       })
    }
 }
 searchToDo();
-
-function creatTemplate(cases) {
-   return `
-      <div class="list ${cases.complete == true ? 'checked' : ''} ">
-         <span class="default-check" ></span > 
-         <label class="my-check list__title">${cases.title}</label>
-         <textarea class="list__text" readonly>${cases.text}</textarea>
-         <button type="button" class="view__details">details</button>
-         <span class="clear"></span>
-       </div >
-      `
-}
 
 creatList.addEventListener('click', () => {
 
@@ -151,7 +150,6 @@ creatList.addEventListener('click', () => {
    searchToDo();
    followText();
    completeTask();
-   deleteToDo();
    dinamic();
 
    input.value = '';
@@ -172,23 +170,13 @@ function followText() {
 }
 followText();
 
-
 // delete task and save in local storage
-function deleteToDo() {
-
-   const deleteBtn = document.querySelectorAll('.clear');
-
-   for (let i = 0; i < cases.length; i++) {
-      deleteBtn[i].addEventListener('click', () => {
-
-         deleteBtn[i].parentElement.remove();
-         console.log(cases[i].title);
-         cases.splice([i], 1);
-         localStorage.setItem('userData', JSON.stringify(cases));
-      })
-   }
+function deleteTask(index) {
+   cases.splice(index, 1);
+   localStorage.setItem('userData', JSON.stringify(cases));
+   searchToDo();
+   followText();
 }
-deleteToDo();
 
 // complete task
 function completeTask() {
